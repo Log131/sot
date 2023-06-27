@@ -6,7 +6,7 @@ import asyncio
 import sqlite3
 from datetime import datetime, time
 
-token = '5984947658:AAFEJNgy0rXV8FxfVRsV7uvcgS8Co1Mi24w'
+token = '6093970106:AAFugNzYa1SL0WTgReF4gHznIwqAF6tSRSY'
 
 bot = Bot(token=token)
 dp = Dispatcher(bot=bot)
@@ -35,7 +35,7 @@ async def warsxd_(msg: types.Message):
            s = tc.execute('SELECT * FROM wars_').fetchall()
         for i in s:
             try:
-                await bot.send_message(chat_id=msg.chat.id, text=f'Пользователь - {i[0]} Имеет - {i[2]}/5 Варнов')
+                await bot.send_message(chat_id=msg.chat.id, text=f'Пользователь - @{i[0]} Имеет - {i[2]}/5 Варнов')
             except Exception as e:
                 print(e)
     except Exception as e:
@@ -122,7 +122,7 @@ async def sends_():
 
     time_now = datetime.now().time()
     time_ = time(hour=10, minute=0)
-    if time_now >= time_:
+    if time_ >= time_now:
         await bot.send_message(chat_id='@GenialniyOtzivnikWork', text='🌟Друзья! \n \n Напоминаем, что в СУТКИ можно писать ТОЛЬКО 1 ОТЗЫВ на каждой площадке. \n \n Увы, но если написать БОЛЕЕ ОДНОГО ОТЗЫВА, то велик шанс его удаления, а следовательно, и блокировка вашего аккаунта. \n \n Спасибо за понимание!')
 
 
@@ -132,7 +132,7 @@ async def sends_():
 async def starts_():
     while True:
         await sends_()
-        await asyncio.sleep(35)
+        await asyncio.sleep()
 
 
 

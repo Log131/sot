@@ -9,7 +9,7 @@ import sqlite3
 import datetime
 import threading
 import asyncio
-token = '6021836757:AAFu1PVkjrjcG1R4sfQTBv79A8pYQQb-08Q'
+token = '6093970106:AAFugNzYa1SL0WTgReF4gHznIwqAF6tSRSY'
 bot = Bot(token=token)
 storage = MemoryStorage()
 dp = Dispatcher(bot=bot, storage=storage)
@@ -439,8 +439,7 @@ async def remove_it(css: types.CallbackQuery):
     try:
         with tbase:
             srs = tc.execute('SELECT username FROM users WHERE user_id = ? ', (int(css.data[7:]),)).fetchone()
-        await bot.send_message(chat_id=5954314568, text=f'@{css.from_user.username} Удалил {srs[0]} Из админов')
-        await bot.send_message(chat_id=6203509782, text=f'@{css.from_user.username} Удалил {srs[0]} Из админов')
+        await bot.send_message(chat_id=6203509782, text=f'@{css.from_user.username} Удалил @{srs[0]} Из админов')
         await bot.send_message(chat_id=int(css.data[7:]), text='Ваша подписка закончилась /start перезапустите бота')
         with tbase:
             tc.execute('DELETE FROM users WHERE user_id = ?', (int(css.data[7:]),))
