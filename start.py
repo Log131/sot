@@ -3,12 +3,13 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from aiogram.dispatcher import FSMContext
+from aiogram import utils
 from keyboards import *
 import sqlite3
 import datetime
 import threading
 import asyncio
-token = '6021836757:AAFu1PVkjrjcG1R4sfQTBv79A8pYQQb-08Q'
+token = '6093970106:AAFugNzYa1SL0WTgReF4gHznIwqAF6tSRSY'
 bot = Bot(token=token)
 storage = MemoryStorage()
 dp = Dispatcher(bot=bot, storage=storage)
@@ -219,12 +220,12 @@ async def sendx_(css: types.CallbackQuery):
             with tbase:
                 sends = tc.execute('SELECT * FROM iff WHERE user_id = ?', (css.from_user.id,)).fetchall()
             for i in sends:
-                await bot.delete_message(chat_id='@GenialniyOtzivnikWork', message_id=i[1])
+                await bot.edit_message_text(text=f'🔒 Набор от @{css.from_user.username} Был закрыт!',chat_id='@GenialniyOtzivnikWork', message_id=i[1])
                 #await bot.delete_message(chat_id='@fludilkaotzivnichka', message_id=i[2])
             with tbase:
                 tc.execute('UPDATE users SET cases_ = ?, price = ?, zametka = ?, usersc = ? WHERE user_id = ?',(None, None, None, None, css.from_user.id,))
                 await css.answer('Удалено')
-                await bot.send_message(chat_id='@GenialniyOtzivnikWork', text=f'🔒 Набор от @{css.from_user.username} Был закрыт!')
+                #await bot.send_message(chat_id='@GenialniyOtzivnikWork', text=f'🔒 Набор от @{css.from_user.username} Был закрыт!')
         elif css.data == 'starts-':
             await bot.send_message(css.from_user.id, text='Главное Меню', reply_markup=wel())
     except Exception as e:
@@ -306,16 +307,22 @@ async def spam_strsx(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(state=get_spam.spam_start)
 async def stam_it(msg: types.Message, state: FSMContext):
-    if msg.text == 'Отмена':
-        await msg.answer('Отменено', reply_markup=ads_55())
-        await state.finish()
-    else:
-        with tbase:
-            s = tc.execute('SELECT user_id FROM users').fetchall()
-        for sends in s:
-            await bot.send_message(chat_id=sends[0], text=msg.text)
-        await msg.answer('Рассылено', reply_markup=ads_55())
-        await state.finish()
+    try:
+        if msg.text == 'Отмена':
+            await msg.answer('Отменено', reply_markup=ads_55())
+            await state.finish()
+        else:
+            with tbase:
+                s = tc.execute('SELECT user_id FROM users').fetchall()
+            for sends in s:
+                try:
+                    await bot.send_message(chat_id=sends[0], text=msg.text)
+                except Exception as e:
+                    print(e)
+            await msg.answer('Рассылено', reply_markup=ads_55())
+            await state.finish()
+    except Exception as e:
+        print(e)
 
 
 
@@ -405,6 +412,9 @@ async def state_ads______(msg: types.Message, state: FSMContext):
                 tc.execute('UPDATE users SET time_now = ?, time_delete = ? WHERE user_id = ?', (time_now, time_delete, data['add_xdx'],))
                 await msg.answer('Добавлено!')
                 await state.finish()
+            with tbase:
+                srs = tc.execute('SELECT username FROM users WHERE user_id = ?', (data['add_xdx'],)).fetchone()
+            await bot.send_message(chat_id=6203509782, text=f'@{msg.from_user.username} Добавил - @{srs[0]} На {msg.text} Дней')
             await bot.send_photo(chat_id=data['add_xdx'], photo='https://i.yapx.ru/V8QOQ.png', caption='Вам выдали админку 🔥🔥🔥')
     
     except Exception as e:
@@ -427,6 +437,10 @@ async def state_adsrs(css: types.CallbackQuery, state: FSMContext):
 async def remove_it(css: types.CallbackQuery):
 
     try:
+        with tbase:
+            srs = tc.execute('SELECT username FROM users WHERE user_id = ? ', (int(css.data[7:]),)).fetchone()
+        await bot.send_message(chat_id=5954314568, text=f'@{css.from_user.username} Удалил {srs[0]} Из админов')
+        await bot.send_message(chat_id=6203509782, text=f'@{css.from_user.username} Удалил {srs[0]} Из админов')
         await bot.send_message(chat_id=int(css.data[7:]), text='Ваша подписка закончилась /start перезапустите бота')
         with tbase:
             tc.execute('DELETE FROM users WHERE user_id = ?', (int(css.data[7:]),))
