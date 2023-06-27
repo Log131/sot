@@ -132,7 +132,7 @@ async def sends_():
 async def starts_():
     while True:
         await sends_()
-        await asyncio.sleep()
+        await asyncio.sleep(35)
 
 
 
